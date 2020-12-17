@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -40,7 +41,27 @@ namespace bilhantering
 
         public MainWindow()
         {
+            //Skapar upp json-filen första gången programmet körs.
+            if (Properties.Settings.Default.FirstRun == true)
+            {
+                Properties.Settings.Default.FirstRun = false;
+                Properties.Settings.Default.Save();
+
+                var temp = JsonConvert.SerializeObject(new List<Bil>());
+                File.WriteAllText(@"minabilar.json", temp);
+
+            }
+
+            //Hämtar alla bilar från json-filen och visar dessa i vår lista.
+            string jsonFile = File.ReadAllText(@"minabilar.json");
+            bilar = JsonConvert.DeserializeObject<List<Bil>>(jsonFile);
+
             InitializeComponent();
+
+            foreach (var bilen in bilar)
+            {
+                Listview.Items.Add($"| {bilen.RegNr} | {bilen.Modell} | {bilen.Vikt}  | {bilen.Hk} | {bilen.Elbil} |  ");
+            }
         }
 
         private void spara_Click(object sender, RoutedEventArgs e)
@@ -58,17 +79,13 @@ namespace bilhantering
                     Elbil = elbil
                 };
 
-                bilar.Add(bil);
+                string jsonFile = File.ReadAllText(@"minabilar.json");
+                bilar = JsonConvert.DeserializeObject<List<Bil>>(jsonFile);
 
-                //Serialize = Ta ett C# objekt och sedan göra det till json.
+                bilar.Add(bil);
+                
                 string jsonString = JsonConvert.SerializeObject(bilar);
                 File.WriteAllText(@"minabilar.json", jsonString);
-
-                //TODO:
-                //1. Läs från json-filen (Deserialisera). Se minabilar.json under \bilhantering\bilhantering\bin\Debug -> I debug mappen finns minabilar.json
-                //2. Iterera genom arrayen.
-                //3. Lägg till de sparade bilarna i ListView. Tips, döp om Listview till något annat. 
-                //4. Snygga till listan genom att lägga till kolumnerna Registreringsnummer, Modell, Vikt, Hästkrafter, Elbil
 
                 Listview.Items.Add($"| {bil.RegNr} | {bil.Modell} | {bil.Vikt}  | {bil.Hk} | {bil.Elbil} |  ");
 
