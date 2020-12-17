@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:bilhantering"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Bosses Bilhantering" Height="450" Width="800">
     <Grid>
         <Button x:Name="spara" Content="Spara" HorizontalAlignment="Left" Margin="221,290,0,0" VerticalAlignment="Top" Width="75" Click="spara_Click" RenderTransformOrigin="0.342,-0.705"/>
         <Label Content="Registrera ny bil nedan" HorizontalAlignment="Left" Margin="45,8,0,0" VerticalAlignment="Top" Width="165" FontWeight="Bold" FontSize="14"/>
